@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CriptoMain - Админ: Запросы на вывод</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">CriptoMain Admin</div>
+            <ul>
+                <li><a href="/">На сайт</a></li>
+                <li><a href="{{ url_for('admin_withdrawals') }}">Запросы на вывод</a></li>
+                <!-- Add other admin links here if needed -->
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="admin-section">
+            <h2>Запросы на вывод средств</h2>
+            {% if requests %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Запроса</th>
+                            <th>Имя пользователя</th>
+                            <th>Сумма (USD)</th>
+                            <th>Способ выплаты</th>
+                            <th>Реквизиты</th>
+                            <th>Статус</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for req in requests %}
+                        <tr>
+                            <td>{{ req.request_id }}</td>
+                            <td>{{ req.username }}</td>
+                            <td>{{ "%.2f"|format(req.amount_usd) }}</td>
+                            <td>{{ req.payment_method }}</td>
+                            <td><textarea readonly rows="3" style="width:100%;">{{ req.payment_details }}</textarea></td>
+                            <td>{{ req.status }}</td>
+                            <td>
+                                {% if req.status == 'pending' %}
+                                    <!-- Add a form here to mark as processed -->
+                                    <form method="POST" action="{{ url_for('admin_process_withdrawal', request_id=req.request_id) }}" style="display:inline;">
+                                        <button type="submit" class="cta-button" style="background-color: #28a745;">Пометить как Обработанный</button>
+                                    </form>
+                                {% else %}
+                                    Обработан
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Нет текущих запросов на вывод.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CriptoMain Admin</p>
+    </footer>
+</body>
+</html>

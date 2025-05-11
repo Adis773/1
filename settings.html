@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CriptoMain - Профиль</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">CriptoMain</div>
+            <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="/game">Играть</a></li>
+                <li><a href="/leaderboard">Рейтинг</a></li>
+                <li><a href="/profile">Профиль</a></li>
+                <li><a href="/login">Вход</a></li>
+                <li><a href="/register">Регистрация</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="profile-section">
+            <h2>Ваш Профиль</h2>
+            <div class="profile-info">
+                <p><strong>Имя пользователя:</strong> <span id="profile-username">Загрузка...</span></p>
+                <p><strong>Email:</strong> <span id="profile-email">Загрузка...</span></p>
+                <p><strong>Всего заработано CriptoCoins:</strong> <span id="profile-total-coins">Загрузка...</span></p>
+                <p><strong>Баланс для вывода ($):</strong> <span id="profile-withdrawable-balance">Загрузка...</span></p>
+            </div>
+
+            <section class="withdrawal-section">
+                <h3>Вывод средств</h3>
+                <form id="withdrawal-form">
+                    <div class="form-group">
+                        <label for="withdrawal-amount">Сумма для вывода ($)</label>
+                        <input type="number" id="withdrawal-amount" name="withdrawal_amount" min="1" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment-method">Способ выплаты</label>
+                        <select id="payment-method" name="payment_method" required>
+                            <option value="" disabled selected>Выберите способ</option>
+                            <option value="bank_transfer">Банковский перевод</option>
+                            <option value="crypto_wallet">Криптокошелек</option>
+                            <option value="phone_number">По номеру телефона</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="payment-details-container">
+                        <!-- Поля для реквизитов будут добавляться сюда динамически через JS -->
+                        <label for="payment-details">Реквизиты для выплаты</label>
+                        <textarea id="payment-details" name="payment_details" rows="3" placeholder="Укажите номер карты/счета, адрес кошелька или номер телефона в зависимости от выбранного способа" required></textarea>
+                    </div>
+                    <button type="submit" class="cta-button">Запросить вывод</button>
+                </form>
+                <div id="withdrawal-message"></div>
+            </section>
+
+            <section class="payout-history">
+                <h3>История выплат (скоро)</h3>
+                <!-- Здесь будет отображаться история запросов на вывод -->
+            </section>
+
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CriptoMain. Все права защищены.</p>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

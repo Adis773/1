@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - CriptoMain</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo"><a href="{{ url_for('index') }}">CriptoMain</a></div>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Главная</a></li>
+                {% if session.user_id %}
+                    <li><a href="{{ url_for('game') }}">Играть</a></li>
+                    <li><a href="{{ url_for('profile_get') }}">Профиль</a></li>
+                    <li><a href="{{ url_for('settings_page') }}">Настройки</a></li>
+                    {% if session.is_admin %}
+                        <li><a href="{{ url_for('admin_dashboard') }}">Админ</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('logout') }}">Выход</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Вход</a></li>
+                    <li><a href="{{ url_for('register') }}">Регистрация</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('leaderboard_page') }}">Рейтинг</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="auth-page">
+        <section class="auth-form-container">
+            <h2>Создать аккаунт</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            <form method="POST" action="{{ url_for('register') }}">
+                <div class="form-group">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль (минимум 6 символов)</label>
+                    <input type="password" id="password" name="password" minlength="6" required>
+                </div>
+                <div class="form-group">
+                    <label for="referral_code">Реферальный код (необязательно)</label>
+                    <input type="text" id="referral_code" name="referral_code" placeholder="Введите код приглашения">
+                </div>
+                <button type="submit" class="cta-button">Зарегистрироваться</button>
+            </form>
+            <p>Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="current-year"></span> CriptoMain. Все права защищены. <a href="{{ url_for('terms_page') }}">Условия использования</a></p>
+    </footer>
+    <script>
+        document.getElementById("current-year").textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

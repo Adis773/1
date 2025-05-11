@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CriptoMain - Игра</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">CriptoMain</div>
+            <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="/game">Играть</a></li>
+                <li><a href="/leaderboard">Рейтинг</a></li>
+                <li><a href="/profile">Профиль</a></li>
+                <li><a href="/login">Вход</a></li>
+                <li><a href="/register">Регистрация</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="game-interface">
+            <h2>Тапай и Зарабатывай!</h2>
+            <div id="click-object-container">
+                <!-- Сюда можно добавить изображение или анимированный объект для клика -->
+                <button id="tap-button">TAP!</button>
+            </div>
+            <div class="game-stats">
+                <p>Ваш баланс: <span id="user-balance">0</span> CriptoCoins</p>
+                <p>Тапов до следующего токена: <span id="taps-remaining">100</span></p>
+            </div>
+        </section>
+
+        <section class="upgrades">
+            <h3>Улучшения (скоро)</h3>
+            <!-- Здесь будут отображаться доступные улучшения -->
+            <p>Увеличьте свой заработок с помощью улучшений!</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CriptoMain. Все права защищены.</p>
+    </footer>
+
+    <script src="/static/script.js"></script> 
+</body>
+</html>

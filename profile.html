@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки - CriptoMain</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Preload music files if they are substantial -->
+</head>
+<body data-theme="{{ user.selected_theme or 'default' }}">
+    <header>
+        <nav>
+            <div class="logo"><a href="{{ url_for('index') }}">CriptoMain</a></div>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Главная</a></li>
+                {% if session.user_id %}
+                    <li><a href="{{ url_for('game') }}">Играть</a></li>
+                    <li><a href="{{ url_for('profile_get') }}">Профиль</a></li>
+                    <li class="active"><a href="{{ url_for('settings_page') }}">Настройки</a></li>
+                    {% if session.is_admin %}
+                        <li><a href="{{ url_for('admin_dashboard') }}">Админ</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('logout') }}">Выход</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Вход</a></li>
+                    <li><a href="{{ url_for('register') }}">Регистрация</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('leaderboard_page') }}">Рейтинг</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="settings-page-container">
+        <h1>Настройки Аккаунта и Персонализация</h1>
+        <div id="settings-message" class="message-banner" style="display:none;"></div>
+
+        <form id="profile-settings-form">
+            <h2>Личные данные</h2>
+            <div class="form-group">
+                <label for="display_name">Отображаемое имя:</label>
+                <input type="text" id="display_name" name="display_name" value="{{ user.display_name or user.username }}">
+            </div>
+            <div class="form-group">
+                <label for="phone_number">Номер телефона (для выплат):</label>
+                <input type="tel" id="phone_number" name="phone_number" value="{{ user.phone_number or '' }}">
+            </div>
+            <div class="form-group">
+                <label for="payment_address">Адрес криптокошелька (USDT TRC20) или другие реквизиты:</label>
+                <input type="text" id="payment_address" name="payment_address" value="{{ user.payment_address or '' }}">
+            </div>
+            <button type="submit" class="cta-button">Сохранить личные данные</button>
+        </form>
+        
+        <hr>
+
+        <form id="personalization-settings-form">
+            <h2>Персонализация</h2>
+            
+            <div class="form-group">
+                <label for="music_enabled">Фоновая музыка:</label>
+                <select id="music_enabled" name="music_enabled">
+                    <option value="true" {% if user.music_enabled %}selected{% endif %}>Включена</option>
+                    <option value="false" {% if not user.music_enabled %}selected{% endif %}>Выключена</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="selected_music_track">Выбрать трек:</label>
+                <select id="selected_music_track" name="selected_music_track">
+                    {% for track in available_music_tracks %}
+                        <option value="{{ track.id }}" {% if user.selected_music_track == track.id %}selected{% endif %}>{{ track.name }}</option>
+                    {% endfor %}
+                    <!-- Add more tracks as needed -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="selected_theme">Тема оформления:</label>
+                <select id="selected_theme" name="selected_theme">
+                     {% for theme in available_themes %}
+                        <option value="{{ theme.id }}" {% if user.selected_theme == theme.id %}selected{% endif %}>{{ theme.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="selected_click_animation">Анимация клика:</label>
+                <select id="selected_click_animation" name="selected_click_animation">
+                    {% for animation in available_animations %}
+                        <option value="{{ animation.id }}" {% if user.selected_click_animation == animation.id %}selected{% endif %}>{{ animation.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="sound_effects_enabled">Звуковые эффекты (тапы, получение токенов):</label>
+                <select id="sound_effects_enabled" name="sound_effects_enabled">
+                    <option value="true" {% if user.sound_effects_enabled %}selected{% endif %}>Включены</option>
+                    <option value="false" {% if not user.sound_effects_enabled %}selected{% endif %}>Выключены</option>
+                </select>
+            </div>
+            <button type="submit" class="cta-button">Сохранить настройки персонализации</button>
+        </form>
+
+        <hr>
+
+        <section class="referral-info-section">
+            <h2>Ваша реферальная программа</h2>
+            <p>Приглашайте друзей и получайте бонус <strong>+$0.01</strong> к вашему персональному курсу обмена за каждого успешно зарегистрированного пользователя!</p>
+            <p>Ваш уникальный реферальный код: <strong id="user-referral-code" class="referral-code-display">{{ user.referral_code or 'Генерируется...' }}</strong></p>
+            <button id="copy-referral-code" class="cta-button-secondary">Копировать код</button>
+            <p>Ваш текущий персональный бонус к курсу: <strong id="user-personal-bonus">+${{ "%.2f"|format(user.personal_rate_bonus or 0.0) }}</strong></p>
+            <!-- Можно добавить статистику по рефералам в будущем -->
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; <span id="current-year"></span> CriptoMain. Все права защищены. <a href="{{ url_for('terms_page') }}">Условия использования</a></p>
+    </footer>
+    
+    <!-- Placeholder for audio elements -->
+    <audio id="background-music" loop></audio>
+    <audio id="tap-sound"></audio>
+    <audio id="token-earn-sound"></audio>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script> 
+    <script>
+        document.getElementById("current-year").textContent = new Date().getFullYear();
+        // Add specific JS for settings page interactions here or in script.js
+    </script>
+</body>
+</html>
+
